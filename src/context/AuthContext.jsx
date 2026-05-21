@@ -14,8 +14,16 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem('token');
     const savedUser = localStorage.getItem('user');
     if (token && savedUser) {
-      setIsAuthenticated(true);
-      setUser(JSON.parse(savedUser));
+      try {
+        setIsAuthenticated(true);
+        setUser(JSON.parse(savedUser));
+      } catch (error) {
+        console.error("Corrupted auth state in localStorage:", error);
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        setIsAuthenticated(false);
+        setUser(null);
+      }
     }
     setLoading(false);
   }, []);

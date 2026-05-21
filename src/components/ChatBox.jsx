@@ -19,9 +19,11 @@ const ChatBox = () => {
     scrollToBottom();
   }, [messages]);
 
+  const generateId = () => Math.random().toString(36).substring(2, 9) + Date.now();
+
   const handleSendMessage = async (text) => {
     // Add user message
-    const newUserMessage = { id: self.crypto.randomUUID(), text, sender: 'user' };
+    const newUserMessage = { id: generateId(), text, sender: 'user' };
     setMessages(prev => [...prev, newUserMessage]);
     setIsLoading(true);
 
@@ -32,12 +34,12 @@ const ChatBox = () => {
       // Add AI response
       setMessages(prev => [
         ...prev, 
-        { id: self.crypto.randomUUID(), text: responseText, sender: 'ai' }
+        { id: generateId(), text: responseText, sender: 'ai' }
       ]);
     } catch (error) {
       setMessages(prev => [
         ...prev, 
-        { id: self.crypto.randomUUID(), text: `Error: ${error.message}`, sender: 'ai' }
+        { id: generateId(), text: `Error: ${error.message}`, sender: 'ai' }
       ]);
     } finally {
       setIsLoading(false);
